@@ -1,5 +1,5 @@
 /******************************************************************************\
-	#PROBLEM-01
+	#PROBLEM-01   √√√√√√√√√√√√
 \******************************************************************************/
 
 function outer() {
@@ -12,33 +12,26 @@ function outer() {
 /****** INSTRUCTIONS PROBLEM 1 ******/
 /* Above you're given a function that returns another function which has a
 closure over the name variable. Invoke outer saving the return value into
-another variable called 'inner'. */
+another variable called 'inner'. */ 
 
-// Code Here
+var inner = outer(); // Code Here
 
-//Once you do that, invoke inner.
-
-//Code Here
-
-
-
-
-
-
+inner(); //Once you do that, invoke inner.
 
 
 
 
 /******************************************************************************\
-	#PROBLEM-02
+	#PROBLEM-02    √√√√√√√√√√√√
 \******************************************************************************/
 
 
 function callFriend(name) {
+
   function dial(number) {
     return 'Calling ' + name + ' at ' + number
   }
-  return dial
+  return dial;
 }
 
 /****** INSTRUCTIONS PROBLEM 2 ******/
@@ -46,44 +39,44 @@ function callFriend(name) {
 Create a callJake function that when invoked with '435-555-9248' returns 'Calling Jake at 435-555-9248'
 in your console. */
 
-  //Code Here
+// var call = callFriend('Jake');
+// function callJake(num) {
+//   return call(num);
+// }
 
-
-
-
-
+var callJake = callFriend('Jake')
+callJake('435-555-9248')
 
 
 
 
 /******************************************************************************\
-	#PROBLEM-03
+	#PROBLEM-03     √√√√√√√√√√√√
 \******************************************************************************/
 
 /****** INSTRUCTIONS PROBLEM 3 ******/
 /* Write a function called makeCounter that makes the following code work
 properly. */
 
-//Code Here
+function makeCounter(counter) {
+  var counter = 0;
+  return function () {
+    return counter += 1;
+  };
+} //Code Here
 
 //Uncomment this once you make your function
-//   var count = makeCounter();
-//   count(); // 1
-//   count(); // 2
-//   count(); // 3
-//   count(); // 4
-
-
-
-
-
-
+  var count = makeCounter();
+  count(); // 1
+  count(); // 2
+  count(); // 3
+  count(); // 4
 
 
 
 
 /******************************************************************************\
-	#PROBLEM-04
+	#PROBLEM-04       √√√√√√√√√√  
 \******************************************************************************/
 
 /****** INSTRUCTIONS PROBLEM 4 ******/
@@ -97,32 +90,31 @@ http://stackoverflow.com/questions/17776940/javascript-module-pattern-with-examp
 */
 
 function counterFactory(value) {
+    var privateCounter = value;   // we want = to the value because they want to pass in the value 10
+    return {
+      inc: function(){
+        privateCounter = privateCounter + 1
+        return privateCounter;
+      },
+      dec: function(){
+        privateCounter = privateCounter - 1;
+        return privateCounter;
+      }
+    }
 
-  // Code here.
 
-
-  return {
-  }
 }
 
-
 counter = counterFactory(10);
-// counter.inc() // 11
-// counter.inc() // 12
-// counter.inc() // 13
-// counter.dec() // 12
-
-
-
-
-
-
-
+counter.inc() // 11
+counter.inc() // 12
+counter.inc() // 13
+counter.dec() // 12
 
 
 
 /******************************************************************************\
-	#PROBLEM-05
+	#PROBLEM-05           √√√√√√√√√√  
 \******************************************************************************/
 
 /****** INSTRUCTIONS PROBLEM 5 ******/
@@ -133,21 +125,18 @@ function motivation(firstname, lastname) {
 
   var welcomeText = 'You\'re doing awesome, keep it up ';
 
-  // code message function here.
+ function message() {
+   return welcomeText + firstname + " " + lastname + ".";
+   
+ } // code message function here.
 
 
   //Uncommment this to return the value of your invoked message function
-  //return message();
+  return message();
 
 }
 
 motivation('Billy', 'Bob'); // 'You're doing awesome keep it up Billy Bob.
-
-
-
-
-
-
 
 
 
@@ -175,11 +164,15 @@ var module = (function() {
   // Anything that is being returned is made public and can be invoked from
   // outside our lexical scope
   return {
+    publicMethod: function (){
+     return privateMethod();
+    }
+    
     // Code here.
   };
-
+ 
 })();
-
+module.publicMethod();
 
 
 /******************************************************************************\
@@ -195,12 +188,23 @@ var secondLevelFriends = ["Anne", "Harry", "Quinton"];
 var allUsers = ["Tom", "Dick", "Harry", "Anne", "Quinton", "Katie", "Mary"];
 
 function findPotentialFriends(existingFriends) {
+  return function(user){
+    for (var i = 0; i<existingFriends.length; i++){
+      if (existingFriends[i] === user){
+        return false;
+      }
+      }
+      return true;
+      }
+    
+    }
+  
 
-}
+
 
 var isNotAFriend = findPotentialFriends( friends );
-// isNotAFriend(allUsers[0]); // false
-// isNotAFriend(secondLevelFriends[2]); // true
+isNotAFriend(allUsers[0]); // false
+isNotAFriend(secondLevelFriends[2]); // true
 
 
 /******************************************************************************\
@@ -210,8 +214,9 @@ var isNotAFriend = findPotentialFriends( friends );
 method, find all potential second level friends as well as potential friends
 from allUsers. */
 
-var potentialSecondLevelFriends = "?";
-var allPotentialFriends = "?";
+var potentialSecondLevelFriends = secondLevelFriends.filter(findPotentialFriends(friends));
+
+var allPotentialFriends = allUsers.filter(findPotentialFriends(friends));
 
 
 /******************************************************************************\
@@ -233,12 +238,27 @@ to 5. What we need to do is console.log(i) so that it logs like so:
 
  Fix the code below to log the desired output.
  */
-
 function timeOutCounter() {
   for (var i = 0; i <= 5; i++) {
-    setTimeout(function() {
-    	console.log(i)
-	}, i * 1000)
+    setTimeout((function(someValue){
+      return function(){
+       console.log(someValue);
+      }
+    })(i), i * 1000)
   }
 }
 timeOutCounter();
+// function closureMaker(someValue){
+//   return function(){
+//    console.log(someValue);
+//   }
+// };
+
+// function timeOutCounter() {
+//   for (var i = 0; i <= 5; i++) {
+//     setTimeout(function() {
+//     	console.log(i)
+// 	}, i * 1000)
+//   }
+// }
+// timeOutCounter();
